@@ -26,7 +26,6 @@ Ex <- function( sf ) {
   n <- length(y_vals)
   dx <- diff(x_vals)
   
-  #<->#  Máscara lógica
   mask <- x_vals[-n] < 0
   
   segment_areasMinus <- dx[mask] * y_vals[-n][mask]
@@ -36,7 +35,6 @@ Ex <- function( sf ) {
   Eminus <- sum(segment_areasMinus)
   E <- Eplus - Eminus
   
-  #<->#  Retorno la esperanza 
   list(E=E, Eplus=Eplus , Eminus=Eminus )
 }
  

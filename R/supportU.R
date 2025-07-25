@@ -11,10 +11,10 @@
 #'                  it defaults to the range of Y in the control group.
 #'
 #' @return A list containing:
-#' \item{ sopY1 }{ Sorted values of Y for the treatment group. }
-#' \item{ sopY0 }{ Sorted values of Y for the control group. }
-#' \item{ sopU }{ Sorted values of U = Y1 - Y0. }
-#' \item{ sopXYU }{ A data frame with all combinations of Y1 and Y0, and their differences (U). }
+#' \item{ suppY1 }{ Sorted values of Y for the treatment group. }
+#' \item{ suppY0 }{ Sorted values of Y for the control group. }
+#' \item{ suppU }{ Sorted values of U = Y1 - Y0. }
+#' \item{ suppXYU }{ A data frame with all combinations of Y1 and Y0, and their differences (U). }
 #'
 #' @export
 supportU <- function(Y,Z,y1.limit=NULL, y0.limit=NULL){
@@ -29,13 +29,13 @@ supportU <- function(Y,Z,y1.limit=NULL, y0.limit=NULL){
   y1 <- sort( union(y1.limit , Y[Z==1]) )
   y0 <- sort( union(y0.limit , Y[Z==0]) )
   
-  sopXYU <- expand.grid( y1 , y0 )
-  sopU <- sopXYU[,1] - sopXYU[,2]
-  sopXYU$sopU <- sopU
+  suppXYU <- expand.grid( y1 , y0 )
+  suppU <- suppXYU[,1] - suppXYU[,2]
+  suppXYU$suppU <- suppU
   
-  list( sopY1  = y1 , 
-        sopY0  = y0 , 
-        sopU   = sort(sopU) , 
-        sopXYU = sopXYU ) 
+  list( suppY1  = y1 , 
+        suppY0  = y0 , 
+        suppU   = sort(suppU) , 
+        suppXYU = suppXYU ) 
 }
  

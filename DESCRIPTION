@@ -1,13 +1,12 @@
 Package: ctepi
 Title: Cumulative Treatment Effect (CTE) with partial identification (PI)
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person("Mauricio", "Toro", , "torocea@uc.cl", role = c("aut", "cre"))
-Description: Partial identification bounds for the Average Treatment Effect (ATE) using
-   the Cumulative Treatment Effect (CTE) estimator. Empirical cumulative distribution
-   function (ECDF) with partial identification bounds under different assumptions.
-   Bounds of Williamson and Downs (1990) for the distribution of the difference between
-   two random variables.
+Description: Partial identification bounds for causal inference based on the 4-epsilon and 4-eta 
+   assumptions for the potential outcomes framework. Inference for the Cumulative Treatment 
+   Effect (CTE) and the Average Treatment Effect (ATE) based on the novel possible-world causal
+   inference framework.
 License: `use_gpl3_license()`
 Encoding: UTF-8
 Imports:

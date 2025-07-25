@@ -19,10 +19,10 @@ it defaults to the range of Y in the control group.}
 }
 \value{
 A list containing:
-\item{ sopY1 }{ Sorted values of Y for the treatment group. }
-\item{ sopY0 }{ Sorted values of Y for the control group. }
-\item{ sopU }{ Sorted values of U = Y1 - Y0. }
-\item{ sopXYU }{ A data frame with all combinations of Y1 and Y0, and their differences (U). }
+\item{ suppY1 }{ Sorted values of Y for the treatment group. }
+\item{ suppY0 }{ Sorted values of Y for the control group. }
+\item{ suppU }{ Sorted values of U = Y1 - Y0. }
+\item{ suppXYU }{ A data frame with all combinations of Y1 and Y0, and their differences (U). }
 }
 \description{
 This function computes the support for the outcome difference \eqn{U = Y_1 - Y_0}, where \eqn{Y_1} and \eqn{Y_0} are outcomes

@@ -25,9 +25,8 @@ plot.ecdfPI <- function (x, F1=NULL, F2=NULL, ..., ylab = "Fn(x)", verticals = F
   plot.stepfun(x$ecdf, ..., ylab = ylab, verticals = verticals, 
                pch = pch)
   abline(h = c(0, 1), col = col.01line, lty = 2)
-  #<-># Si no especifico cotas, uso las sin supuestos (incluídas en x)
   if ( is.null(F1) ) { F1 <- x$F1 }
   if ( is.null(F2) ) { F2 <- x$F2 }
-  plotecdfbound(F1=F1, F2=F2, x.limit=x.limit, col.bounds=col.bounds, alpha.bounds=alpha.bounds)  
+  addStepBounds(F1=F1, F2=F2, x.limit=x.limit, col.bounds=col.bounds, alpha.bounds=alpha.bounds)  
 } 
 

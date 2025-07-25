@@ -2,7 +2,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List ldbudboptimCpp(NumericVector z_values, 
+List ldbudboptimCpp(NumericVector y_values, 
                       Function F1, 
                       Function F2, 
                       Function F3, 
@@ -10,7 +10,7 @@ List ldbudboptimCpp(NumericVector z_values,
                       NumericVector x_limit, 
                       NumericVector y_limit, 
                       double delta = 0.1,
-                      Nullable<NumericVector> sopY = R_NilValue) {
+                      Nullable<NumericVector> addtoU = R_NilValue) {
   
   // Encontrar mínimo y máximo de x_limit y y_limit
   double min_x_limit = x_limit[0];
@@ -18,7 +18,7 @@ List ldbudboptimCpp(NumericVector z_values,
   double min_y_limit = y_limit[0];
   double max_y_limit = y_limit[1];
 
-  int num_z = z_values.size();
+  int num_z = y_values.size();
   
   // Vectores para almacenar los resultados de cotainf y cotasup para cada z
   NumericVector cotainf(num_z);
@@ -26,7 +26,7 @@ List ldbudboptimCpp(NumericVector z_values,
 
   // Iterar sobre los valores de z
   for (int j = 0; j < num_z; ++j) {
-    double z = z_values[j];
+    double z = y_values[j];
 
     // Generar valores de u basados en delta, x_limit, y_limit y z
     double min_val = std::min(min_x_limit, min_y_limit + z) - 3 * delta;
@@ -39,10 +39,10 @@ List ldbudboptimCpp(NumericVector z_values,
       u[i] = min_val + i * delta;
     }
   
-    // Si sopY no es NULL, agregar sus valores a u
-    if (sopY.isNotNull()) {
-      NumericVector sopY_vec(sopY);
-      u = union_(u, sopY_vec); // Usamos la función union_ de Rcpp para garantizar unicidad y eficiencia
+    // Si addtoU no es NULL, agregar sus valores a u
+    if (addtoU.isNotNull()) {
+      NumericVector addtoU_vec(addtoU);
+      u = union_(u, addtoU_vec); // Usamos la función union_ de Rcpp para garantizar unicidad y eficiencia
     }
 
     // Calcular shifted_u
@@ -74,7 +74,7 @@ List ldbudboptimCpp(NumericVector z_values,
   }
   
   // Devolver resultados
-  return List::create(Named("z") = z_values,
+  return List::create(Named("y") = y_values,
                       Named("ldb") = cotainf, 
                       Named("udb") = cotasup);
 }

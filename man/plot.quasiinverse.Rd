@@ -33,8 +33,7 @@
 }
 \description{
 This function creates a plot for objects of class \code{quasiinverse}. It uses the base R function \code{plot.stepfun}
-to plot the empirical cumulative distribution function (ECDF) and adds additional elements to the plot,
-such as horizontal lines at 0 and 1, and bands of identification using \code{plotecdfbound()}.
+to plot the empirical cumulative distribution function (ECDF).
 }
 \details{
 This function is a fork of \code{plot.ecdf} for \code{ecdfPI} objects.

@@ -41,12 +41,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // ldbudboptimCpp
-List ldbudboptimCpp(NumericVector z_values, Function F1, Function F2, Function F3, Function F4, NumericVector x_limit, NumericVector y_limit, double delta, Nullable<NumericVector> sopY);
-RcppExport SEXP _ctepi_ldbudboptimCpp(SEXP z_valuesSEXP, SEXP F1SEXP, SEXP F2SEXP, SEXP F3SEXP, SEXP F4SEXP, SEXP x_limitSEXP, SEXP y_limitSEXP, SEXP deltaSEXP, SEXP sopYSEXP) {
+List ldbudboptimCpp(NumericVector y_values, Function F1, Function F2, Function F3, Function F4, NumericVector x_limit, NumericVector y_limit, double delta, Nullable<NumericVector> addtoU);
+RcppExport SEXP _ctepi_ldbudboptimCpp(SEXP y_valuesSEXP, SEXP F1SEXP, SEXP F2SEXP, SEXP F3SEXP, SEXP F4SEXP, SEXP x_limitSEXP, SEXP y_limitSEXP, SEXP deltaSEXP, SEXP addtoUSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type z_values(z_valuesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_values(y_valuesSEXP);
     Rcpp::traits::input_parameter< Function >::type F1(F1SEXP);
     Rcpp::traits::input_parameter< Function >::type F2(F2SEXP);
     Rcpp::traits::input_parameter< Function >::type F3(F3SEXP);
@@ -54,8 +54,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type x_limit(x_limitSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type y_limit(y_limitSEXP);
     Rcpp::traits::input_parameter< double >::type delta(deltaSEXP);
-    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type sopY(sopYSEXP);
-    rcpp_result_gen = Rcpp::wrap(ldbudboptimCpp(z_values, F1, F2, F3, F4, x_limit, y_limit, delta, sopY));
+    Rcpp::traits::input_parameter< Nullable<NumericVector> >::type addtoU(addtoUSEXP);
+    rcpp_result_gen = Rcpp::wrap(ldbudboptimCpp(y_values, F1, F2, F3, F4, x_limit, y_limit, delta, addtoU));
     return rcpp_result_gen;
 END_RCPP
 }

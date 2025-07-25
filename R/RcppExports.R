@@ -9,8 +9,8 @@ aggregate_cpp <- function(values, groups, levelgroup) {
     .Call('_ctepi_aggregate_cpp', PACKAGE = 'ctepi', values, groups, levelgroup)
 }
 
-ldbudboptimCpp <- function(z_values, F1, F2, F3, F4, x_limit, y_limit, delta = 0.1, sopY = NULL) {
-    .Call('_ctepi_ldbudboptimCpp', PACKAGE = 'ctepi', z_values, F1, F2, F3, F4, x_limit, y_limit, delta, sopY)
+ldbudboptimCpp <- function(y_values, F1, F2, F3, F4, x_limit, y_limit, delta = 0.1, addtoU = NULL) {
+    .Call('_ctepi_ldbudboptimCpp', PACKAGE = 'ctepi', y_values, F1, F2, F3, F4, x_limit, y_limit, delta, addtoU)
 }
 
 massCpp <- function(matriz) {

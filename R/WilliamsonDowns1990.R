@@ -91,8 +91,8 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
     uu <- sort( union(uu, sop$sopU) )
   }
   
-  yy1 <- sop$sopY1
-  yy0 <- sop$sopY0
+  yy1 <- sop$suppY1
+  yy0 <- sop$suppY0
   
   if ( is.element("Ignorability",boundaries) ){
     i <- i+1
@@ -104,7 +104,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                     F1 = func$ecdfYZ1,
                     F2 = func$ecdfYZ0,
                     delta = delta.ldbudboptim,
-                    sopY = addtoU) 
+                    addtoU = addtoU) 
       }
       
       Ignboundsp <- multiOSlapply( uu , ldbudboptimP , mc.cores = parallel::detectCores() - freeCores )
@@ -119,13 +119,13 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                                F1 = func$ecdfYZ1,
                                F2 = func$ecdfYZ0,
                                delta = delta.ldbudboptim,
-                               sopY = addtoU)
+                               addtoU = addtoU)
     }
     
-    ldbIgn <- approxfun(Ignbounds$z, Ignbounds$ldb, method = "constant", 
+    ldbIgn <- approxfun(Ignbounds$y, Ignbounds$ldb, method = "constant", 
                         yleft = min(Ignbounds$ldb), yright = max(Ignbounds$ldb), 
                         f = 0, ties = "ordered")
-    udbIgn <- approxfun(Ignbounds$z, Ignbounds$udb, method = "constant", 
+    udbIgn <- approxfun(Ignbounds$y, Ignbounds$udb, method = "constant", 
                         yleft = min(Ignbounds$udb), yright = max(Ignbounds$udb), 
                         f = 0, ties = "ordered")
     
@@ -147,7 +147,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                     F3 = func$ecdfPIbounds$FuY1, #F3 F^Y(1)  F^X
                     F4 = func$ecdfPIbounds$FlY0, #F4 F_Y(0)  F_Y
                     delta = delta.ldbudboptim,
-                    sopY = addtoU) 
+                    addtoU = addtoU) 
       }
       
       NABoundsp <- multiOSlapply( uu , ldbudboptimP , mc.cores = parallel::detectCores() - freeCores )
@@ -164,13 +164,13 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                               F3 = func$ecdfPIbounds$FuY1, 
                               F4 = func$ecdfPIbounds$FlY0, 
                               delta = delta.ldbudboptim,
-                              sopY = addtoU)
+                              addtoU = addtoU)
     }
     
-    cotal <- approxfun(NABounds$z, NABounds$ldb, method = "constant", 
+    cotal <- approxfun(NABounds$y, NABounds$ldb, method = "constant", 
                        yleft = 0, yright = 1, 
                        f = 0, ties = "ordered")
-    cotau <- approxfun(NABounds$z, NABounds$udb, method = "constant", 
+    cotau <- approxfun(NABounds$y, NABounds$udb, method = "constant", 
                        yleft = 0, yright = 1, 
                        f = 0, ties = "ordered")
     
@@ -194,7 +194,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                     F3 = func$ecdfPIbounds.eps$FuY1eps, #F3 F^Y(1)  F^X
                     F4 = func$ecdfPIbounds.eps$FlY0eps, #F4 F_Y(0)  F_Y
                     delta = delta.ldbudboptim,
-                    sopY = addtoU) 
+                    addtoU = addtoU) 
       }
       
       e4Boundsp <- multiOSlapply( uu , ldbudboptimP , mc.cores = parallel::detectCores() - freeCores )
@@ -211,13 +211,13 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                               F3 = func$ecdfPIbounds.eps$FuY1eps, 
                               F4 = func$ecdfPIbounds.eps$FlY0eps, 
                               delta = delta.ldbudboptim,
-                              sopY = addtoU)
+                              addtoU = addtoU)
     }
     
-    cotaleps <- stats::approxfun(e4Bounds$z, e4Bounds$ldb, method = "constant", 
+    cotaleps <- stats::approxfun(e4Bounds$y, e4Bounds$ldb, method = "constant", 
                                 yleft = 0, yright = 1, 
                                 f = 0, ties = "ordered")
-    cotaueps <- stats::approxfun(e4Bounds$z, e4Bounds$udb, method = "constant", 
+    cotaueps <- stats::approxfun(e4Bounds$y, e4Bounds$udb, method = "constant", 
                                 yleft = 0, yright = 1, 
                                 f = 0, ties = "ordered")
     

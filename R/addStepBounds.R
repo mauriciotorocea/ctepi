@@ -12,7 +12,7 @@
 #'
 #' @importFrom grDevices rgb
 #' @export
-plotecdfbound <- function( F1, F2, x.limit = NULL, col.bounds="blue", alpha.bounds=0.1 , lty=1, col.lines=NA){
+addStepBounds <- function( F1, F2, x.limit = NULL, col.bounds="blue", alpha.bounds=0.1 , lty=1, col.lines=NA){
   vals1 <- get("x", envir = environment(F1) )
   vals2 <- get("x", envir = environment(F2) )
   
