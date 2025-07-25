@@ -33,14 +33,14 @@ For Windows users: You must also install `Rtools`. [install Rtools.](https://cra
 #### Installation:
 
 ``` r
-devtools::install_github("Mautoro/ctepi")
+devtools::install_github("mauriciotorocea/ctepi")
 ```
 
 ## :link: Quick links
 
 ### I would like to report a bug
 
-Head to the [ctepi issue tracker](https://github.com/Mautoro/ctepi/issues).
+Head to the [ctepi issue tracker](https://github.com/mauriciotorocea/ctepi/issues).
 
 
 ## **:blue_book:** License
