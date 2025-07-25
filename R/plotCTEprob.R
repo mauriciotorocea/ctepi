@@ -49,9 +49,11 @@ plotCTEprob <- function( CTEpr , epsilon=0, displayepsilon=T, addlegend=T,
   # Computing probabilities of events E+, E- and E0. Exact and approximate methods.
   if ( is.null(CTEpr$masses) ) {
     dfaux <- data.frame( EpPi = CTEpr$Pi$EpPi , sqrtVpPi = sqrt(CTEpr$Pi$VpPi) )
-    p_positive_effect <- apply( dfaux , 1, function(x) {pnorm( epsilon , x[1] , x[2] , lower.tail = F) } )
-    p_negative_effect <- apply( dfaux , 1, function(x) {pnorm( -epsilon , x[1] , x[2] , lower.tail = T) } )
-    p_no_effect <- apply( dfaux , 1, function(x) {pnorm( epsilon , x[1] , x[2] , lower.tail = T) - pnorm( -epsilon , x[1] , x[2] , lower.tail = T) } )
+    h <- hnormalcorrection(p1 = 1-CTEpr$probMZ$probK1Z1, n1 = CTEpr$probMZ$n1,
+                           p0 = 1-CTEpr$probMZ$probK1Z0, n0 = CTEpr$probMZ$n0)
+    p_positive_effect <- apply( dfaux , 1, function(x) {pnorm( epsilon + h/2 , x[1] , x[2] , lower.tail = F) } )
+    p_negative_effect <- apply( dfaux , 1, function(x) {pnorm( -epsilon - h/2 , x[1] , x[2] , lower.tail = T) } )
+    p_no_effect <- apply( dfaux , 1, function(x) {pnorm( epsilon  + h/2 , x[1] , x[2] , lower.tail = T) - pnorm( -epsilon  - h/2 , x[1] , x[2] , lower.tail = T) } )
     
   } else {
     masses <- CTEpr$masses
