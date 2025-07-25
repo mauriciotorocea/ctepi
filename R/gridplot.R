@@ -49,7 +49,7 @@ gridplot <- function(  x.grid=NULL, y.grid=NULL,
               ifelse(!is.na(ymax) , ymax , max(y.grid) ) )
   
   plot( x=1 , y=1 , 
-        xlim = xlim, ylim = ylim,
+        xlim = x.lim, ylim = y.lim,
         bty = "n" ,         # gráfico sin borde 
         fg = "white" ,      # color del borde del gráfico
         xaxt="n", yaxt="n", # no añado ejes
