@@ -39,10 +39,11 @@
 #'
 #'
 #' @export
-plotCTEprob <- function( CTEpr , epsilon=0, displayepsilon=T, addlegend=T, 
-                         add=F, colors = c("blue3", "green3", "red3"),
-                         lty=1, lwd=1, ylab = "Probability", ylim=c(0,1),
-                         cex.legend=1, ...){
+plotCTEprob <- function( CTEpr , epsilon=0, showplot=T, add=F, displayepsilon=T, addlegend=T, 
+                         colors = c("blue3", "green3", "red3"), cex.legend=1, 
+                         legend.location = "topright", displaytitle = T, title.line = 1.2,
+                         lty=1, lwd=1, xlab = "Prior propensity p", ylab = "Probability", 
+                         xmin = 0, xmax = 1, ymin = -0.02, ymax = 1.02, xlab.line = 2.5, ...){
   
   p <- CTEpr$p
   
@@ -71,34 +72,51 @@ plotCTEprob <- function( CTEpr , epsilon=0, displayepsilon=T, addlegend=T,
     }
   }
   
-  # Negative causal effect
-  if (add) { # Drawing on existing plot
-    lines( p , p_negative_effect , ylim=ylim,
+  rval <- list(p_positive_effect = p_positive_effect, 
+               p_negative_effect = p_negative_effect, 
+               p_no_effect = p_no_effect )
+  
+  if (showplot) {
+    # Create new plot
+    if (!add) {
+      gridplot(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
+               xlab = xlab, ylab = ylab, xlab.line = xlab.line, ... )
+    }
+    
+    # Negative causal effect
+    lines( p , p_negative_effect , 
            type = "l", col=colors[3], lty=lty , lwd=lwd)
-  } else{ # New plot
-    plot( p , p_negative_effect , ylim=ylim,
-          type = "l", col=colors[3], lty=lty, las=1, ylab = "y", lwd=lwd)
+    # Positive causal effect
+    lines( p , p_positive_effect ,
+           type = "l", col=colors[2], lty=lty, lwd=lwd)
+    # No causal effect
+    lines( p , p_no_effect , type = "l", col=colors[1],  lty=lty, lwd=lwd)
+    
+    if (addlegend) {
+      legend(x=legend.location, 
+             legend = c( expression(E[0][","][epsilon]), 
+                         expression(E["+"][","][epsilon]), 
+                         expression(E["-"][","][epsilon]) ),
+             col=colors, lty=1, xpd=TRUE, inset=c(0, -0.10), 
+             y.intersp = -1,
+             horiz=T, bty="n", text.width = NA, cex=cex.legend)
+    }
+    
+    # Adding the epsilon value
+    if (displayepsilon) {
+      title(main = bquote(epsilon ~ "=" ~ .(epsilon) ) , cex.main = 0.8, adj = 0, line = 0.4)
+    }
+    
+    # Adding title
+    if (displaytitle) {
+      title(main = expression(bold("Probabilities of" ~ E[paste("+",",", epsilon)] ~ "," ~ E[paste("-", ",", epsilon)] ~ "and" ~ E[paste("0", ",", epsilon)])),
+            cex.main = 0.9, adj = 0, line = title.line)
+    }
+    
+    # Returning probabilities
+    invisible( rval )
+  } else {
+    rval
   }
-  # Positive causal effect
-  lines( p , p_positive_effect ,
-         type = "l", col=colors[2], lty=lty, lwd=lwd)
-  
-  if (addlegend) {
-    legend("top", legend=c("No effect", "Possitive effect", "Negative effect"),
-           col=colors, lty=1, xpd=TRUE, inset=c(0, -0.13),
-           horiz=T, bty="n", text.width = NA, cex=cex.legend)
-  }
-  # No causal effect
-  lines( p , p_no_effect , type = "l", col=colors[1],  lty=lty, lwd=lwd)
-  
-  # Adding the epsilon value at the bottom left
-  if (displayepsilon) {
-    mtext( paste0("epsilon=",epsilon), side = 1, line = 2, adj = 0, cex = 0.8)
-  }
-  
-  # Returning probabilities
-  invisible( list(p_positive_effect = p_positive_effect, 
-                  p_negative_effect = p_negative_effect, 
-                  p_no_effect = p_no_effect ) )
 }
 
