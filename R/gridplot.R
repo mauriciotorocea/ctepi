@@ -18,6 +18,7 @@ gridplot <- function(  x.grid=NULL, y.grid=NULL,
                        add.plot=FALSE,
                        x.axes = T,
                        y.axes = T,
+                       restore.original_par = F,
                        ...){
   
   check_numeric_scalar <- function(x) {
@@ -103,6 +104,6 @@ gridplot <- function(  x.grid=NULL, y.grid=NULL,
     lines( x , y , pch = pch, col = col.line, type = type.plot , ...)
   }
   
-  par(original_par)
+  if (restore.original_par) par(original_par)
 } 
 
