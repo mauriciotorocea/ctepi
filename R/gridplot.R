@@ -48,6 +48,9 @@ gridplot <- function(  x.grid=NULL, y.grid=NULL,
   y.lim <- c( ifelse(!is.na(ymin) , ymin , min(y.grid) ) ,
               ifelse(!is.na(ymax) , ymax , max(y.grid) ) )
   
+  original_par <- par(no.readonly = TRUE)
+  par(mar = c(4, 4, 2, 1))
+    
   plot( x=1 , y=1 , 
         xlim = x.lim, ylim = y.lim,
         bty = "n" ,         # gráfico sin borde 
@@ -99,5 +102,7 @@ gridplot <- function(  x.grid=NULL, y.grid=NULL,
   if (add.plot) { #<-># add.plot igual a FALSE hace que no grafique
     lines( x , y , pch = pch, col = col.line, type = type.plot , ...)
   }
+  
+  par(original_par)
 } 
 
