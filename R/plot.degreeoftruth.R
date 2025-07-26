@@ -40,12 +40,24 @@
 #'
 #' @export
 plot.degreeoftruth <- function( 
-    DegreesOfTruth, showplot=T, add=F, displayepsilon=T, addlegend=T, 
-    colors = c("blue3", "green3", "red3"), cex.legend=1, 
-    legend.location = "topright", displaytitle = T, title.line = 1.2,
-    lty=1:length(DegreesOfTruth), lwd=1, xlab = "Prior propensity p", ylab = "Probability", 
-    xmin = 0, xmax = 1, ymin = -0.02, ymax = 1.02, xlab.line = 2.5, ...)
-  {
+    DegreesOfTruth, 
+    showplot=T, 
+    add=F, 
+    displayepsilon=T, 
+    addlegend=T, 
+    colors = c("blue3", "green3", "red3"), 
+    cex.legend=1, 
+    legend.location = "topright", 
+    displaytitle = T, 
+    title.line = 1.2,
+    lty=1:length(DegreesOfTruth), 
+    lwd=1, 
+    xlab = "Prior propensity p", 
+    ylab = "Probability", 
+    addCriteria = T,
+    xmin = 0, xmax = 1, ymin = -0.02, ymax = 1.02, 
+    xlab.line = 2.5, ...)
+{
   
   p <- attr(DegreesOfTruth, "p")
   criteria <- attr(DegreesOfTruth, "criteria")
@@ -59,6 +71,12 @@ plot.degreeoftruth <- function(
   if (!add) {
     gridplot(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax,
              xlab = xlab, ylab = ylab, xlab.line = xlab.line, ... )
+  }
+  
+  if (addCriteria) {
+    polygon( criteria[c(2,3,3,2)] , c( c(-1,-1) , rev(c(2,2)) ) ,  
+             border = NA , col=AlphaCol("blue3",0.08) )
+    abline( v = criteria[1], col=AlphaCol("gray",0.3) , lty=1, lwd=2)
   }
   
   for (eps in 1:length(epsilon)) {
@@ -81,8 +99,7 @@ plot.degreeoftruth <- function(
            legend = c( expression(E[0][","][epsilon]), 
                        expression(E["+"][","][epsilon]), 
                        expression(E["-"][","][epsilon]) ),
-           col=colors, lty=1, xpd=TRUE, inset=c(0, -0.10), 
-           y.intersp = -1,
+           col=colors, lty=1, xpd=TRUE, inset=c(0, -0.13), lwd=lwd,
            horiz=T, bty="n", text.width = NA, cex=cex.legend)
   }
   
@@ -98,8 +115,3 @@ plot.degreeoftruth <- function(
           cex.main = 0.9, adj = 0, line = title.line)
   }
 }
-
-
-
-
-

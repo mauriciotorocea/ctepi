@@ -19,6 +19,7 @@
   lwd = 1,
   xlab = "Prior propensity p",
   ylab = "Probability",
+  addCriteria = T,
   xmin = 0,
   xmax = 1,
   ymin = -0.02,
