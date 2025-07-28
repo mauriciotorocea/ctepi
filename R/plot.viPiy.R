@@ -24,7 +24,7 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
     })
   }
   
-  rangeYobs <- 1.05 * attr(caso2.1exp, "rangeYobs")
+  rangeYobs <- 1.05 * attr(Pi, "rangeYobs")
   if ( anyNA(xmin) ) xmin <- rangeYobs[1]
   if ( anyNA(xmax) ) xmax <- rangeYobs[2]
   if ( anyNA(ymin) ) ymin <- 1.10 * min(sapply(Pi, function(df) min(df$L, na.rm = TRUE)), na.rm = TRUE)
