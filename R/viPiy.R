@@ -28,7 +28,7 @@ viPiy <- function(Yobs, Zobs, y , alpha=0.05, X=NULL, covariates=NULL,
   for (i in 1:length(y)) {
     Yobs.aux <- .deltay( Yobs, censoring, y[i] )
     
-    CTEpd <- ctepi::CTEprobdata(Yobs=Yobs.aux, Zobs=Zobs, p = "PY1K1", alpha=alpha , suppressMessages = TRUE,
+    CTEpd <- ctepi::Piy(Yobs=Yobs.aux, Zobs=Zobs, p = "PY1K1", alpha=alpha , suppressMessages = TRUE,
                                 X = X, covariates = !is.null(covariates) , approxtonorm = approxtonorm)
     
     if ( nlist == 1) CTEpd <- list( "Marginal" = CTEpd )
