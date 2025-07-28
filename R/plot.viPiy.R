@@ -9,7 +9,9 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
                         line.title = 0.5 + 0.5*!gammascale ,
                         col=NULL, col.lines=NA, addlegend=TRUE, add=FALSE){
   
-  if ( is.data.frame(Pi)) Pi <- list( "Converted" = Pi )
+  rangeYobs <- 1.05 * attr(Pi, "rangeYobs")
+  
+  if ( is.data.frame(Pi) ) Pi <- list( "Converted" = Pi )
   
   if ( is.null(col) ) {
     col <- rainbow( length(Pi) , s = 0.8, v = 0.8, start = 0)
@@ -24,14 +26,12 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
     })
   }
   
-  rangeYobs <- 1.05 * attr(Pi, "rangeYobs")
   if ( anyNA(xmin) ) xmin <- rangeYobs[1]
   if ( anyNA(xmax) ) xmax <- rangeYobs[2]
   if ( anyNA(ymin) ) ymin <- 1.10 * min(sapply(Pi, function(df) min(df$L, na.rm = TRUE)), na.rm = TRUE)
   if ( anyNA(ymax) ) ymax <- 1.10 * max(sapply(Pi, function(df) max(df$U, na.rm = TRUE)), na.rm = TRUE)
   
   if (!add) {
-    par(mar = c(4, 4, 2, 1))
     gridplot( xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, xlab = xlab, ylab = ylab)
   }
   
