@@ -40,16 +40,15 @@
 #' 
 #' where \eqn{\varepsilon_{11}, \varepsilon_{12}, \varepsilon_{01}, \varepsilon_{02}} correspond to \code{eps11}, \code{eps12}, \code{eps01}, and \code{eps02},, respectively.
 #' 
-#' Warning: The minimum-convolution strongly depends on the delta and delta.ldbudboptim parameters. If delta and delta.ldbudboptim are too large, the estimation will be poor. A reasonable value for delta is given by \code{deltamin(Y[Z==1], Y[Z==0])}. Be cautious: as delta (or delta.ldbudboptim) decreases, the computation time increases significantly.
+#' Warning: The minimum-convolution strongly depends on the delta and delta.ldbudboptim parameters. If delta and delta.ldbudboptim are too large, the estimation will be poor. Be cautious: as delta (or delta.ldbudboptim) decreases, the computation time increases significantly.
 #' 
 #' 
 #' 
-#' @import parallel
 #' @import Rcpp
 #' 
 #' @export
 WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL, 
-                                boundaries = c("Ignorability","NoAssumptions","FourEpsilon") ,
+                                boundaries = "4epsilon4eta" ,
                                 gridsize = 2000,
                                 delta.u = diff( range( Y[Z==1] , na.rm = T) - rev(range( Y[Z==0] , na.rm = T )) )/gridsize , 
                                 delta.ldbudboptim = diff( range( Y[Z==1] , na.rm = T) - rev(range( Y[Z==0] , na.rm = T)) )/gridsize, 
@@ -57,22 +56,16 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                                 parallel=FALSE, freeCores=1,
                                 eps11=0,eps12=0,eps01=0,eps02=0,
                                 eta11=0,eta12=0,eta01=0,eta02=0){
+                                
+  if (boundaries %in% c("FourEpsilon", "4epsilon4eta", "Ignorability", "NoAssumptions") ) {
+    stop('Error: Enter a valid input for boundaries ("4epsilon4eta", "Ignorability" and/or "NoAssumptions")')
+  }
+  
   if ( is.null(y1.limit) ) {
     y1.limit <- c( min(Y[Z==1],na.rm = T) , max(Y[Z==1], na.rm = T) )
   }
   if ( is.null(y0.limit) ) {
     y0.limit <- c( min(Y[Z==0],na.rm = T) , max(Y[Z==0], na.rm = T) )
-  }
-  
-  multiOSlapply <- function(X, FUN, mc.cores = 1, ...) {
-    if (Sys.info()["sysname"] == "Windows") {
-      cl <- parallel::makeCluster(mc.cores)
-      on.exit(parallel::stopCluster(cl), add = TRUE) 
-      parallel::clusterExport(cl, ls(globalenv()))  
-      parallel::parLapply(cl, X, FUN, ...)
-    } else {
-      parallel::mclapply(X, FUN, mc.cores = mc.cores, ...)
-    }
   }
   
   rval <- list()
@@ -98,7 +91,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
     i <- i+1
     ###
     if (parallel) {
-      cat(paste0(i,'. Computing boundaries with ignorability assumptions. Parallelized computation with "parallel" library.\n'))
+      message(paste0(i,'. Computing boundaries with ignorability assumptions. Parallelized computation with "parallel" library.\n'))
       ldbudboptimP <- function(x) {
         ldbudboptim(x, range(yy1), range(yy0),
                     F1 = func$ecdfYZ1,
@@ -114,7 +107,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                               udb = unlist(Ignboundsp)[3*c(1:length(Ignboundsp))]
       )
     } else {
-      cat(paste0(i,'. Computing boundaries with ignorability assumption.\n'))
+      message(paste0(i,'. Computing boundaries with ignorability assumption.\n'))
       Ignbounds <- ldbudboptim(uu, range(yy1), range(yy0),
                                F1 = func$ecdfYZ1,
                                F2 = func$ecdfYZ0,
@@ -139,7 +132,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
   if ( is.element("NoAssumptions",boundaries) ){
     i <- i+1
     if (parallel) {
-      cat(paste0(i,'. Computing boundaries with no assumptions. Parallelized computation with "parallel" library.\n'))
+      message(paste0(i,'. Computing boundaries with no assumptions. Parallelized computation with "parallel" library.\n'))
       ldbudboptimP <- function(x) {
         ldbudboptim(x, range(yy1), range(yy0),
                     F1 = func$ecdfPIbounds$FlY1, #F1 F_Y(1)  F_X
@@ -157,7 +150,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                              udb = unlist(NABoundsp)[3*c(1:length(NABoundsp))]
       )
     } else {
-      cat(paste0(i,'. Computing boundaries with no assumptions\n'))
+      message(paste0(i,'. Computing boundaries with no assumptions\n'))
       NABounds <- ldbudboptim(uu, range(yy1), range(yy0),
                               F1 = func$ecdfPIbounds$FlY1, 
                               F2 = func$ecdfPIbounds$FuY0,
@@ -186,7 +179,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
     i <- i+1
     
     if (parallel){
-      cat(paste0(i,'. Computing boundaries with 4-epsilon assumption. Parallelized computation with "parallel" library.\n'))
+      message(paste0(i,'. Computing boundaries with 4-epsilon assumption. Parallelized computation with "parallel" library.\n'))
       ldbudboptimP <- function(x) {
         ldbudboptim(x, range(yy1), range(yy0),
                     F1 = func$ecdfPIbounds.eps$FlY1eps, #F1 F_Y(1)  F_X
@@ -204,7 +197,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                              udb = unlist(e4Boundsp)[3*c(1:length(e4Boundsp))]
       )
     } else {
-      cat(paste0(i,'. Computing boundaries with 4-epsilon assumption\n'))
+      message(paste0(i,'. Computing boundaries with 4-epsilon assumption\n'))
       e4Bounds <- ldbudboptim(uu, range(yy1), range(yy0),
                               F1 = func$ecdfPIbounds.eps$FlY1eps, 
                               F2 = func$ecdfPIbounds.eps$FuY0eps,

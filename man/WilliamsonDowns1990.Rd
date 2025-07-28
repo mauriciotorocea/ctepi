@@ -9,7 +9,7 @@ WilliamsonDowns1990(
   Z,
   y1.limit = NULL,
   y0.limit = NULL,
-  boundaries = c("Ignorability", "NoAssumptions", "FourEpsilon"),
+  boundaries = "4epsilon4eta",
   gridsize = 2000,
   delta.u = diff(range(Y[Z == 1], na.rm = T) - rev(range(Y[Z == 0], na.rm = T)))/gridsize,
   delta.ldbudboptim = diff(range(Y[Z == 1], na.rm = T) - rev(range(Y[Z == 0], na.rm =
@@ -82,5 +82,5 @@ P(Y_{z_0} \leq y | Z=z_1) - P(Y_{z_0} \leq y | Z=z_0)
 
 where \eqn{\varepsilon_{11}, \varepsilon_{12}, \varepsilon_{01}, \varepsilon_{02}} correspond to \code{eps11}, \code{eps12}, \code{eps01}, and \code{eps02},, respectively.
 
-Warning: The minimum-convolution strongly depends on the delta and delta.ldbudboptim parameters. If delta and delta.ldbudboptim are too large, the estimation will be poor. A reasonable value for delta is given by \code{deltamin(Y[Z==1], Y[Z==0])}. Be cautious: as delta (or delta.ldbudboptim) decreases, the computation time increases significantly.
+Warning: The minimum-convolution strongly depends on the delta and delta.ldbudboptim parameters. If delta and delta.ldbudboptim are too large, the estimation will be poor. Be cautious: as delta (or delta.ldbudboptim) decreases, the computation time increases significantly.
 }
