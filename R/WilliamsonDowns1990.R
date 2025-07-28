@@ -57,7 +57,7 @@ WilliamsonDowns1990 <- function(Y, Z,  y1.limit=NULL, y0.limit=NULL,
                                 eps11=0,eps12=0,eps01=0,eps02=0,
                                 eta11=0,eta12=0,eta01=0,eta02=0){
                                 
-  if (boundaries %in% c("FourEpsilon", "4epsilon4eta", "Ignorability", "NoAssumptions") ) {
+  if ( ! boundaries %in% c("FourEpsilon", "4epsilon4eta", "Ignorability", "NoAssumptions") ) {
     stop('Error: Enter a valid input for boundaries ("4epsilon4eta", "Ignorability" and/or "NoAssumptions")')
   }
   
