@@ -75,8 +75,11 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
              box.col = "gray",
              horiz=F, text.width = NA )
     } else {
+      if ( is.null(legend) ) {
+        legend <- names(Pi)
+      }
       graphics::legend("topleft", cex=0.7,
-             legend = ifelse(is.null(legend), names(Pi), legend) , 
+             legend = legend , 
              lty = 1,  lwd=2,
              col = col, 
              pt.cex = 2, 
