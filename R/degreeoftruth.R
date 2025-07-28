@@ -1,5 +1,5 @@
 #' @export
-degreeoftruth <- function( CTEpr , epsilon=0 ){
+degreeoftruth <- function( CTEpr , epsilon=0 , normalcorrectionMethod = "gcd"){
   
   p <- CTEpr$p
   criteria <- c( criterion1 = CTEpr$probMZ$probZ1K1 * CTEpr$probMZ$probY1Z1K1 + CTEpr$probMZ$probZ0K1 * CTEpr$probMZ$probY1Z0K1 ,
@@ -13,7 +13,8 @@ degreeoftruth <- function( CTEpr , epsilon=0 ){
       # Approximation to normal distribution
       dfaux <- data.frame( EpPi = CTEpr$Pi$EpPi , sqrtVpPi = sqrt(CTEpr$Pi$VpPi) )
       h <- hnormalcorrection(p1 = 1-CTEpr$probMZ$probK1Z1, n1 = CTEpr$probMZ$n1,
-                             p0 = 1-CTEpr$probMZ$probK1Z0, n0 = CTEpr$probMZ$n0)
+                             p0 = 1-CTEpr$probMZ$probK1Z0, n0 = CTEpr$probMZ$n0,
+                             method = normalcorrectionMethod)
       p_positive_effect <- apply( dfaux , 1, function(x) {pnorm( epsilon[eps] + h/2 , x[1] , x[2] , lower.tail = F) } )
       p_negative_effect <- apply( dfaux , 1, function(x) {pnorm( -epsilon[eps] - h/2 , x[1] , x[2] , lower.tail = T) } )
       p_no_effect <- apply( dfaux , 1, function(x) {

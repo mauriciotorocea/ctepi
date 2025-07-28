@@ -26,7 +26,7 @@ viPiy <- function(Yobs, Zobs, y , alpha=0.05, X=NULL, covariates=NULL,
     result[[i]] <- data.frame()
   }
   for (i in 1:length(y)) {
-    Yobs.aux <- deltay( Yobs, censoring, y[i] )
+    Yobs.aux <- .deltay( Yobs, censoring, y[i] )
     
     CTEpd <- ctepi::CTEprobdata(Yobs=Yobs.aux, Zobs=Zobs, p = "PY1K1", alpha=alpha , suppressMessages = TRUE,
                                 X = X, covariates = !is.null(covariates) , approxtonorm = approxtonorm)
