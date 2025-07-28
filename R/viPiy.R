@@ -38,9 +38,7 @@ viPiy <- function(Yobs, Zobs, y , alpha=0.05, X=NULL, covariates=NULL,
     }
   }
   
-  if (nlist>1) {
-    names(result) <- names(CTEpd)
-  }
+  names(result) <- names(CTEpd)
   
   attr( result, "rangeYobs") <- range(Yobs, na.rm = TRUE)
   class(result) <- c( "viPiy", class(result) )

@@ -7,7 +7,11 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
                         ylab = ifelse(gammascale,"CTE",expression(Pi)), 
                         main = ifelse(gammascale,"CTE",expression(Pi)),
                         line.title = 0.5 + 0.5*!gammascale ,
-                        col=NULL, col.lines=NA, addlegend=TRUE, add=FALSE){
+                        col=NULL, 
+                        col.lines=NA, 
+                        addlegend=TRUE,
+                        legend = NULL,
+                        add=FALSE){
   
   rangeYobs <- 1.05 * attr(Pi, "rangeYobs")
   
@@ -59,8 +63,11 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
   
   if ( addlegend & !add ) {
     if (length(Pi)==1) {
-      legend("topleft",
-             legend = c( ifelse( gammascale, "CTEign", expression(E(Pi)) ) ,"95% VI") ,
+      if ( is.null(legend) ) {
+        legend <- c( ifelse( gammascale, "CTEign", expression(E(Pi)) ) ,"95% VI")
+      }
+      graphics::legend("topleft",
+             legend = legend ,
              pch=c(19,15),
              pt.cex = c(1, 1.7) , # tamaño de los símbolos pch
              col = c(col, AlphaCol(col,0.3)),
@@ -68,8 +75,8 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
              box.col = "gray",
              horiz=F, text.width = NA )
     } else {
-      legend("topleft", cex=0.7,
-             legend = names(Pi) , 
+      graphics::legend("topleft", cex=0.7,
+             legend = ifelse(is.null(legend), names(Pi), legend) , 
              lty = 1,  lwd=2,
              col = col, 
              pt.cex = 2, 
