@@ -215,7 +215,7 @@ possibleworlds <- function(M, nNAZ1 = 0, nNAZ0 = 0, nNA=NULL, nZ1K1, nZ0K1,
                 probassing = c(probassingZ1=probassingZ1, probassingZ0=probassingZ0) ,
                 Pi=Pi )
   
-  rval <- class( "possibleworlds" , class(rval) )
+  class(rval) <- c( "possibleworlds" , class(rval) )
   rval
 }
 
