@@ -147,6 +147,7 @@ Piy <- function( Yobs, Zobs, X=NULL, p = c(0:60)/60 , y=NULL , covariates = F, a
     }
   }
   
+  probs <- class( "possibleworlds" , class(probs) )
   probs
 }
 

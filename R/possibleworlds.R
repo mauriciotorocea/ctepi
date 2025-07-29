@@ -210,9 +210,13 @@ possibleworlds <- function(M, nNAZ1 = 0, nNAZ0 = 0, nNA=NULL, nZ1K1, nZ0K1,
                 qalpha2=qalpha2 , q1malpha2=q1malpha2 )
   }
   
-  list( masses=masses, cdf=cdf , p=p , probMZ=probMZ,
-        probassing = c(probassingZ1=probassingZ1, probassingZ0=probassingZ0) ,
-        Pi=Pi )
+  
+  rval <- list( masses=masses, cdf=cdf , p=p , probMZ=probMZ,
+                probassing = c(probassingZ1=probassingZ1, probassingZ0=probassingZ0) ,
+                Pi=Pi )
+  
+  rval <- class( "possibleworlds" , class(rval) )
+  rval
 }
 
 
