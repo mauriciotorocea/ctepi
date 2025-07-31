@@ -92,8 +92,8 @@
 #' 
 #' @export
 ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL, 
-                      eps11=1,eps12=1,eps01=1,eps02=1,
-                      eta11=1,eta12=1,eta01=1,eta02=1, na.rm = F) {
+                         eps11=1,eps12=1,eps01=1,eps02=1,
+                         eta11=1,eta12=1,eta01=1,eta02=1, na.rm = F) {
   YZ1min <- min(Y[Z==1],na.rm = T)
   YZ1max <- max(Y[Z==1],na.rm = T)
   YZ0min <- min(Y[Z==0],na.rm = T)
@@ -189,7 +189,7 @@ ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL,
   FuY0 <- approxfun( c(y0.limit[1],vals0,y0.limit[2]) , c(pZ1,pZ1 + pZ0 * cumsumpY0Z0W1,1), 
                      method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
   
-    
+  
   y_valsf1eps <- cumsumpY1Z1W1 * (1-pW0Z1) * pZ1  +  pmax( 0 , cumsumpY1Z1W1-eta12) * pW0Z1 * pZ1  +
     pmax( 0 , -eps12 + cumsumpY1Z1W1 * (1-pW0Z1) + pW0Z1 * pmax( 0 , cumsumpY1Z1W1-eta12) ) * pZ0
   
@@ -220,6 +220,11 @@ ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL,
   FuY0eps <- approxfun( c(y0.limit[1],vals0, y0.limit[2]) , c( min(y_valsf4eps) , y_valsf4eps , 1), 
                         method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
   
+  x.aux <- sort( unique(c( knots(FlY0eps), knots(FuY1eps) )) )
+  CTElb <- stepfun( x.aux ,  FlY0eps(x.aux) - FuY1eps(x.aux), right = TRUE)
+  x.aux <- sort( unique(c( knots(FuY0eps), knots(FlY1eps) )) )
+  CTEub <- stepfun( x.aux ,  FuY0eps(x.aux) - FlY1eps(x.aux), right = TRUE)
+  
   class(F1) <- c("ecdf", "stepfun", class(F1))
   class(F2) <- c("ecdf", "stepfun", class(F2))
   class(F3) <- c("ecdf", "stepfun", class(F3))
@@ -247,11 +252,12 @@ ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL,
         yz1 = yz1,
         yz0 = yz0,
         ecdfPIbounds = list(F1=F1,F2=F2,F3=F3,F4=F4,
-                       FlY1=FlY1, FuY1=FuY1, FlY0=FlY0, FuY0=FuY0),
+                            FlY1=FlY1, FuY1=FuY1, FlY0=FlY0, FuY0=FuY0),
         ecdfPIbounds.eps = list(F1epsilon=F1epsilon, F2epsilon=F2epsilon,
-                           F3epsilon=F3epsilon, F4epsilon=F4epsilon,
-                           FlY1eps=FlY1eps, FuY1eps=FuY1eps,
-                           FlY0eps=FlY0eps, FuY0eps=FuY0eps),
+                                F3epsilon=F3epsilon, F4epsilon=F4epsilon,
+                                FlY1eps=FlY1eps, FuY1eps=FuY1eps,
+                                FlY0eps=FlY0eps, FuY0eps=FuY0eps),
+        CTEbounds.eps = list(CTElb=CTElb, CTEub=CTEub),
         dataset = dataset
   )
 }

@@ -35,13 +35,13 @@ gridplot <- function(  x.grid=NULL, y.grid=NULL,
     if (!(check_numeric_scalar(xmin) && check_numeric_scalar(xmax))) {
       stop("Provide either x.grid or both valid xmin and xmax.")
     }
-    x.grid <- getpartition(xmin, xmax)
+    x.grid <- pretty( c(xmin, xmax) )
   }
   if (is.null(y.grid) || anyNA(y.grid)) {
     if (!(check_numeric_scalar(ymin) && check_numeric_scalar(ymax))) {
       stop("Provide either y.grid or both valid ymin and ymax.")
     }
-    y.grid <- getpartition(ymin, ymax)
+    y.grid <- pretty( c(ymin, ymax) )
   }
   
   x.lim <- c( ifelse(!is.na(xmin) , xmin , min(x.grid) ) ,
