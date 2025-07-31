@@ -36,9 +36,9 @@ addStepBounds <- function( F1, F2, x.limit = NULL, col.bounds="blue", alpha.boun
   nn1 <- length(xx1aux)
   nn2 <- length(xx2aux)
   xx1 <- xx1aux[-c(1,nn1)]
-  yy1 <- F1(xx1aux[-c(nn1-1,nn1)])
+  yy1 <- F1(xx1aux[-c(nn1-1,nn1)]  + 35*.Machine$double.eps )
   xx2 <- rev(xx2aux[-c(1,nn2)])
-  yy2 <- F2( rev(xx2aux)[-c(1,2)])
+  yy2 <- F2( rev(xx2aux)[-c(1,2)]  + 35*.Machine$double.eps )
   
   polygon( c(xx1, xx2) , c(yy1,yy2) ,  lty=lty,
            border = col.lines , col=AlphaCol(col.bounds,alpha.bounds))  
