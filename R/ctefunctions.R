@@ -91,7 +91,7 @@
 #' 
 #' 
 #' @export
-ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL, 
+ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL, equalsuppY1Y0=F,
                          eps11=1,eps12=1,eps01=1,eps02=1,
                          eta11=1,eta12=1,eta01=1,eta02=1, na.rm = F) {
   YZ1min <- min(Y[Z==1],na.rm = T)
@@ -116,6 +116,9 @@ ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL,
     stop(paste0('Error: y0.limit[1] should be lower than min(Y[Z==0]) = ',YZ0min,'.')) 
   } else if (YZ0max > y0.limit[2]) { 
     stop(paste0('Error: y0.limit[2] should be greater than min(Y[Z==0]) = ',YZ0max,'.')) 
+  }
+  if (equalsuppY1Y0) {
+    y1.limit <- y0.limit <- range( c(y1.limit,y0.limit) )
   }
   
   

@@ -9,6 +9,7 @@ ctefunctions(
   Z,
   y1.limit = NULL,
   y0.limit = NULL,
+  equalsuppY1Y0 = F,
   eps11 = 1,
   eps12 = 1,
   eps01 = 1,
