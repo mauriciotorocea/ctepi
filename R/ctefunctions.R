@@ -220,11 +220,6 @@ ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL,
   FuY0eps <- approxfun( c(y0.limit[1],vals0, y0.limit[2]) , c( min(y_valsf4eps) , y_valsf4eps , 1), 
                         method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
   
-  x.aux <- sort( unique(c( knots(FlY0eps), knots(FuY1eps) )) )
-  CTElb <- stepfun( x.aux ,  FlY0eps(x.aux) - FuY1eps(x.aux), right = TRUE)
-  x.aux <- sort( unique(c( knots(FuY0eps), knots(FlY1eps) )) )
-  CTEub <- stepfun( x.aux ,  FuY0eps(x.aux) - FlY1eps(x.aux), right = TRUE)
-  
   class(F1) <- c("ecdf", "stepfun", class(F1))
   class(F2) <- c("ecdf", "stepfun", class(F2))
   class(F3) <- c("ecdf", "stepfun", class(F3))
@@ -241,6 +236,13 @@ ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL,
   class(FuY1eps) <- c("ecdf", "stepfun", class(FuY1eps))
   class(FlY0eps) <- c("ecdf", "stepfun", class(FlY0eps))
   class(FuY0eps) <- c("ecdf", "stepfun", class(FuY0eps))
+  
+  x.aux <- sort( unique(c( knots(FlY0eps), knots(FuY1eps) )) )
+  x.aux.m <- c( min(x.aux)-100 , x.aux)
+  CTElb <- stepfun( x.aux , FlY0eps(x.aux.m) - FuY1eps(x.aux.m), right = TRUE)
+  x.aux <- sort( unique(c( knots(FuY0eps), knots(FlY1eps) )) )
+  x.aux.m <- c( min(x.aux)-100 , x.aux)
+  CTEub <- stepfun( x.aux ,  FuY0eps(x.aux.m) - FlY1eps(x.aux.m), right = TRUE)
   
   list( ecdfYZ1 = ecdfYZ1 , 
         ecdfYZ0 = ecdfYZ0 ,
