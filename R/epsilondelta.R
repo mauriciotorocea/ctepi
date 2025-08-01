@@ -1,0 +1,38 @@
+#' @export
+epsilondelta <- function(Y, Z, 
+                         delta.seq = pretty( c(0,diff( range(Y, na.rm = T) )/20) , n = 10), 
+                         eta= c(0, 0.5, 1), 
+                         ysup = max(Y, na.rm = TRUE)*100,
+                         positive.effect = TRUE, 
+                         eps.tol = 1e-8, max.iter = 100) {
+  if (!positive.effect) Y <- -Y
+  
+  # Para cada eta, calcular una columna
+  result <- sapply(eta, function(current_eta) {
+    sapply(delta.seq, function(delta) {
+      target_fun <- function(eps) {
+        ctef.aux <- ctefunctions(Y, Z,
+                                 eps11 = eps, eps12 = eps,
+                                 eps01 = eps, eps02 = eps,
+                                 eta11 = current_eta, eta12 = current_eta,
+                                 eta01 = current_eta, eta02 = current_eta)
+        integrate.sf(ctef.aux$CTEbounds.eps$CTElb)(ysup) - delta
+      }
+      
+      f0 <- tryCatch(target_fun(0), error = function(e) NA)
+      f1 <- tryCatch(target_fun(1), error = function(e) NA)
+      
+      if (is.na(f0) || is.na(f1) || sign(f0) == sign(f1)) {
+        NA
+      } else {
+        tryCatch(uniroot(target_fun, c(0, 1), tol = eps.tol, maxiter = max.iter)$root,
+                 error = function(e) NA)
+      }
+    })
+  })
+  
+  # Asignar nombres
+  rownames(result) <- paste0("delta=", signif(delta.seq, 4))
+  colnames(result) <- paste0("eta=", signif(eta, 4))
+  return(result)
+}
