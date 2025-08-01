@@ -8,7 +8,6 @@ epsilondelta <- function(Y, Z,
                          eps.tol = 1e-8, max.iter = 100) {
   if (!positive.effect) Y <- -Y
   
-  # Para cada eta, calcular una columna
   result <- sapply(eta, function(current_eta) {
     sapply(delta.seq, function(delta) {
       target_fun <- function(eps) {
@@ -34,8 +33,11 @@ epsilondelta <- function(Y, Z,
     })
   })
   
-  # Asignar nombres
-  rownames(result) <- paste0("delta=", signif(delta.seq, 4))
-  colnames(result) <- paste0("eta=", signif(eta, 4))
+  if (length(delta.seq)>1) {
+    rownames(result) <- paste0("delta=", signif(delta.seq, 4))
+    colnames(result) <- paste0("eta=", signif(eta, 4))
+  } else {
+    names(result) <- paste0("eta=", signif(eta, 4))
+  }
   return(result)
 }
