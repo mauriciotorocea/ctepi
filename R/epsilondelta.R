@@ -4,6 +4,7 @@ epsilondelta <- function(Y, Z,
                          eta= c(0, 0.5, 1), 
                          ysup = max(Y, na.rm = TRUE)*100,
                          positive.effect = TRUE, 
+                         y1.limit=NULL, y0.limit=NULL, equalsuppY1Y0=F, 
                          eps.tol = 1e-8, max.iter = 100) {
   if (!positive.effect) Y <- -Y
   
@@ -15,7 +16,9 @@ epsilondelta <- function(Y, Z,
                                  eps11 = eps, eps12 = eps,
                                  eps01 = eps, eps02 = eps,
                                  eta11 = current_eta, eta12 = current_eta,
-                                 eta01 = current_eta, eta02 = current_eta)
+                                 eta01 = current_eta, eta02 = current_eta, 
+                                 y1.limit = y1.limit, y0.limit = y0.limit, 
+                                 equalsuppY1Y0 = equalsuppY1Y0)
         integrate.sf(ctef.aux$CTEbounds.eps$CTElb)(ysup) - delta
       }
       
