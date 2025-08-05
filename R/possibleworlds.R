@@ -216,6 +216,8 @@ possibleworlds <- function(M, nNAZ1 = 0, nNAZ0 = 0, nNA=NULL, nZ1K1, nZ0K1,
                 Pi=Pi )
   
   class(rval) <- c( "possibleworlds" , class(rval) )
+  rval$call <- match.call()
+  
   rval
 }
 
