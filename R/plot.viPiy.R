@@ -66,9 +66,15 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
   title(main = main, cex.main=0.9, adj=0, line= line.title )
   
   if ( addlegend & !add ) {
+    if ( is.null(as.list(x$call)$alpha) ) {
+      alpha <- formals(viPiy)$alpha
+    } else {
+      alpha <- as.list(x$call)$alpha
+    }
     if (length(Pi)==1) {
       if ( is.null(legend) ) {
-        legend <- c( ifelse( gammascale, "CTEign", expression(E(Pi)) ) ,"95% VI")
+        legend <- c( ifelse( gammascale, "CTEign", expression(E(Pi)) ) , 
+                     paste0( round( 100 * ( 1 - alpha ), 2), "% VI") )
       }
       graphics::legend("topleft",
              legend = legend ,
