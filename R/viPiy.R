@@ -18,6 +18,7 @@ viPiy <- function(Yobs, Zobs, y , alpha=0.05, X=NULL, covariates=NULL,
   if ( is.null(X) | is.null(covariates) ) {
     nlist <- 1
   } else {
+    if ( is.vector(X) ) X <- matrix(X, ncol=1, dimnames = list( NULL, "X") )
     nlist <- X |> unique() |> nrow()
   }
   
