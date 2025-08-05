@@ -18,6 +18,7 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
   if ( is.data.frame(Pi) ) Pi <- list( "Converted" = Pi )
   
   
+  call <- Pi$call
   Pi$ATE <- NULL
   Pi$call <- NULL
   
@@ -66,10 +67,10 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
   title(main = main, cex.main=0.9, adj=0, line= line.title )
   
   if ( addlegend & !add ) {
-    if ( is.null(as.list(Pi$call)$alpha) ) {
+    if ( is.null(as.list(call)$alpha) ) {
       alpha <- formals(viPiy)$alpha
     } else {
-      alpha <- as.list(Pi$call)$alpha
+      alpha <- as.list(call)$alpha
     }
     if (length(Pi)==1) {
       if ( is.null(legend) ) {
