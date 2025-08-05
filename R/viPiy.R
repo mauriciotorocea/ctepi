@@ -40,8 +40,11 @@ viPiy <- function(Yobs, Zobs, y , alpha=0.05, X=NULL, covariates=NULL,
   
   names(result) <- names(CTEpd)
   
-  attr( result, "rangeYobs") <- range(Yobs, na.rm = TRUE)
   class(result) <- c( "viPiy", class(result) )
+  result$ATE <- viATE(caso3.2)$ATE
+  
+  attr( result, "rangeYobs") <- range(Yobs, na.rm = TRUE)
+  result$call <- match.call()
   
   result
 }

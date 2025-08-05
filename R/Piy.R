@@ -71,8 +71,9 @@ Piy <- function( Yobs, Zobs, X=NULL, p = c(0:60)/60 , y=NULL , covariates = F, a
     stop("Insert a valid value for p.")
   }
   
-  if ( is.null(y) ) {
-  } else {
+  if ( is.null(y) ) y <- 0 
+  aux <- function(x) length(  unique( x[!is.na(x)] )  ) > 2
+  if ( aux(Yobs) ) {
     if( !suppressMessages ) { message(paste0("The outcome variable is 1 if Yobs > y, 0 if Yobs ≤ y, and NA if Yobs is NA. y=",y,".")) }
     Yobs <- 1*(Yobs > y)
   }
