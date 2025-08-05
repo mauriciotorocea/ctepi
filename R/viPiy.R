@@ -28,8 +28,8 @@ viPiy <- function(Yobs, Zobs, y , alpha=0.05, X=NULL, covariates=NULL,
   for (i in 1:length(y)) {
     Yobs.aux <- .deltay( Yobs, censoring, y[i] )
     
-    CTEpd <- ctepi::Piy(Yobs=Yobs.aux, Zobs=Zobs, p = "PY1K1", alpha=alpha , suppressMessages = TRUE,
-                                X = X, covariates = !is.null(covariates) , approxtonorm = approxtonorm)
+    CTEpd <- Piy(Yobs=Yobs.aux, Zobs=Zobs, p = "PY1K1", alpha=alpha , suppressMessages = TRUE,
+                 X = X, covariates = !is.null(covariates) , approxtonorm = approxtonorm)
     
     if ( nlist == 1) CTEpd <- list( "Marginal" = CTEpd )
     for (j in 1:nlist) {
@@ -41,7 +41,7 @@ viPiy <- function(Yobs, Zobs, y , alpha=0.05, X=NULL, covariates=NULL,
   names(result) <- names(CTEpd)
   
   class(result) <- c( "viPiy", class(result) )
-  result$ATE <- viATE(caso3.2)$ATE
+  result$ATE <- viATE(result)$ATE
   
   attr( result, "rangeYobs") <- range(Yobs, na.rm = TRUE)
   result$call <- match.call()
