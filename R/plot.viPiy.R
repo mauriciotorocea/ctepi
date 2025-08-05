@@ -21,6 +21,10 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
     col <- rainbow( length(Pi) , s = 0.8, v = 0.8, start = 0)
   }
   
+  Pi$ATE <- NULL
+  Pi$call <- NULL
+
+  
   if (gammascale) {
     Pi <- lapply(Pi, function(df) {
       df$EpPi <- df$gamma * df$EpPi
@@ -38,7 +42,7 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
   if (!add) {
     gridplot( xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, xlab = xlab, ylab = ylab)
   }
-  
+    
   i <- 0
   for (df in Pi) {
     i <- i+1
