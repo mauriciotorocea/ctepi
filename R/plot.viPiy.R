@@ -17,14 +17,14 @@ plot.viPiy <- function( Pi, xmin = NA, xmax = NA , ymin = NA, ymax = NA ,
   
   if ( is.data.frame(Pi) ) Pi <- list( "Converted" = Pi )
   
-  if ( is.null(col) ) {
-    col <- rainbow( length(Pi) , s = 0.8, v = 0.8, start = 0)
-  }
   
   Pi$ATE <- NULL
   Pi$call <- NULL
-
   
+  if ( is.null(col) ) {
+    col <- rainbow( length(Pi) , s = 0.8, v = 0.8, start = 0)
+  }
+    
   if (gammascale) {
     Pi <- lapply(Pi, function(df) {
       df$EpPi <- df$gamma * df$EpPi
