@@ -213,7 +213,7 @@ possibleworlds <- function(M, nNAZ1 = 0, nNAZ0 = 0, nNA=NULL, nZ1K1, nZ0K1,
   
   rval <- list( masses=masses, cdf=cdf , p=p , probMZ=probMZ,
                 probassing = c(probassingZ1=probassingZ1, probassingZ0=probassingZ0) ,
-                Pi=Pi )
+                Pi=Pi , alpha=alpha)
   
   class(rval) <- c( "possibleworlds" , class(rval) )
   rval$call <- match.call()

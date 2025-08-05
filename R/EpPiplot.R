@@ -59,14 +59,9 @@ EpPiplot <- function( CTEpr,
         legend.location.y <- legend.location[2]
       }
     }
-    if ( is.null(as.list(CTEpr$call)$alpha) ) {
-      alpha <- formals(viPiy)$alpha
-    } else {
-      alpha <- as.list(CTEpr$call)$alpha
-    }
     legend( x = legend.location.x, y = legend.location.y,
             cex=0.7, 
-            legend = c(expression(E[p](Pi)), paste0( round( 100 * ( 1 - alpha ), 2) ,"% VI") ), 
+            legend = c(expression(E[p](Pi)), paste0( round( 100 * ( 1 - CTEpr$alpha ), 2) ,"% VI") ), 
             lty = c(1, NA),  pch = c(NA, 15),  
             col = c(col.EpPi, AlphaCol(col.VI, col.VI.alpha) ), 
             pt.cex = 2,  # Size of the rectangle
