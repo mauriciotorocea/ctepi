@@ -14,6 +14,15 @@ print.viPiy <- function (x, digits = max(3L, getOption("digits") - 3L), ...)
   print.default(format(x$ATE, digits = digits), print.gap = 2L, 
                 quote = FALSE)
   cat("\n")
+  
+  x.aux <- x
+  x.aux$ATE  <- NULL
+  x.aux$call <- NULL
+  
+  cat("gamma proportionality factor between Pi and CTEign:\n")
+  for (i in 1:(length(x.aux)) ) {
+    print_gamma_ranges( x.aux[[i]], names(x.aux)[i] )
+  }
+  
   invisible(x)
 }
-
