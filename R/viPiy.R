@@ -23,9 +23,11 @@ viPiy <- function(Yobs, Zobs, y , alpha=0.05, X=NULL, covariates=NULL,
   }
   
   result <- list()
+  probMZ <- list()
   for (i in 1:nlist) {
     result[[i]] <- data.frame()
-  }
+    probMZ[[i]] <- data.frame()
+  } 
   for (i in 1:length(y)) {
     Yobs.aux <- .deltay( Yobs, censoring, y[i] )
     
@@ -36,19 +38,23 @@ viPiy <- function(Yobs, Zobs, y , alpha=0.05, X=NULL, covariates=NULL,
     for (j in 1:nlist) {
       result[[j]] <- rbind(  result[[j]]  ,  c(y[i], CTEpd[[j]]$Pi$qalpha2 , CTEpd[[j]]$Pi$q1malpha2, CTEpd[[j]]$p, CTEpd[[j]]$Pi$EpPi , CTEpd[[j]]$gamma)   )
       colnames(result[[j]]) <- c("y","L","U","p","EpPi","gamma")
+      
+      probMZ[[j]] <- rbind( probMZ[[j]] , 
+                            c( unlist(CTEpd[[j]]$probMZ[c("M","probK1Z1","probK1Z0")]) , "gamma"=CTEpd[[j]]$gamma) )
+      colnames(probMZ[[j]]) <- c("M","probK1Z1","probK1Z0","gamma")
     }
   }
   
   names(result) <- names(CTEpd)
+  names(probMZ) <- names(CTEpd)
   
   class(result) <- c( "viPiy", class(result) )
   result$ATE <- viATE(result)$ATE
-  
+
   attr( result, "rangeYobs") <- range(Yobs, na.rm = TRUE)
+  attr( result, "probMZ") <- lapply(probMZ, unique) 
+
   result$call <- match.call()
   
   result
 }
-
-
-
