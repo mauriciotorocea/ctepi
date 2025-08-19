@@ -29,8 +29,8 @@ quasiinverse <- function(f, continuity='right', ymin=NULL, ymax=NULL){
     vals <- get('vals', envir = environment(f$ecdf) )
     Fvals <- get('Fvals', envir = environment(f$ecdf) )
   } else {
-    vals <- get('vals', envir = environment(f) )
-    Fvals <- get('Fvals', envir = environment(f) )
+    vals <- get(x, envir = environment(f) )
+    Fvals <- get(y, envir = environment(f) )
   }
   if (continuity=="right") {
     ff <- 0
