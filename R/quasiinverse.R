@@ -1,8 +1,8 @@
-#' Calculate quasi-inverse of ecdf functions
+#' Calculate quasi-inverse of discrete cumulative distribution functions
 #'
-#' This function calculates the quasi-inverse of empirical cumulative distribution function (ECDF). 
+#' This function calculates the quasi-inverse of discrete cumulative distribution function. 
 #'
-#' @param f A function of class \code{ecdf} or \code{ecdfPI}.
+#' @param f A function of class \code{stepfun}, \code{ecdf} or \code{ecdfPI}.
 #' @param continuity Continuity side (default: right).
 #' @param ymin,ymax Minimum and maximum values of the random variable. If `NULL`, the data’s minimum and maximum values are used (`NULL` by default).
 #'
@@ -25,8 +25,13 @@
 #'
 #' @export
 quasiinverse <- function(f, continuity='right', ymin=NULL, ymax=NULL){
-  vals <- get('vals', envir = environment(f$ecdf) )
-  Fvals <- get('Fvals', envir = environment(f$ecdf) )
+  if ( "ecdfPI" %in% class(f) ) {
+    vals <- get('vals', envir = environment(f$ecdf) )
+    Fvals <- get('Fvals', envir = environment(f$ecdf) )
+  } else {
+    vals <- get('vals', envir = environment(f) )
+    Fvals <- get('Fvals', envir = environment(f) )
+  }
   if (continuity=="right") {
     ff <- 0
   } else if (continuity=="left") {

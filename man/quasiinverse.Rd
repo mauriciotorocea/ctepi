@@ -2,12 +2,12 @@
 % Please edit documentation in R/quasiinverse.R
 \name{quasiinverse}
 \alias{quasiinverse}
-\title{Calculate quasi-inverse of ecdf functions}
+\title{Calculate quasi-inverse of discrete cumulative distribution functions}
 \usage{
 quasiinverse(f, continuity = "right", ymin = NULL, ymax = NULL)
 }
 \arguments{
-\item{f}{A function of class \code{ecdf} or \code{ecdfPI}.}
+\item{f}{A function of class \code{stepfun}, \code{ecdf} or \code{ecdfPI}.}
 
 \item{continuity}{Continuity side (default: right).}
 
@@ -17,7 +17,7 @@ quasiinverse(f, continuity = "right", ymin = NULL, ymax = NULL)
 A function of class \code{quasiinverse}.
 }
 \description{
-This function calculates the quasi-inverse of empirical cumulative distribution function (ECDF).
+This function calculates the quasi-inverse of discrete cumulative distribution function.
 }
 \examples{
 result <- ecdfPI(iris$Sepal.Length)
