@@ -4,7 +4,7 @@
 \alias{integrate.sf}
 \title{Cumulative integral for step functions}
 \usage{
-integrate.sf(sf)
+integrate.sf(sf, lower = NULL, upper = NULL, returnfunction = FALSE)
 }
 \arguments{
 \item{sf}{A step function of class "stepfun".}
@@ -22,7 +22,7 @@ y <- c(0, 1, 0, 1, 0)
 sf <- stepfun(x, y)
 
 # Integrate the step function
-integral_sf <- integrate.sf(sf)
+integral_sf <- integrate.sf(sf, returnfunction=TRUE)
 
 # Plot the original step function and its integral
 plot(sf, main = "Step Function")

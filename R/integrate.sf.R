@@ -14,7 +14,7 @@
 #' sf <- stepfun(x, y)
 #'
 #' # Integrate the step function
-#' integral_sf <- integrate.sf(sf)
+#' integral_sf <- integrate.sf(sf, returnfunction=TRUE)
 #'
 #' # Plot the original step function and its integral
 #' plot(sf, main = "Step Function")
@@ -22,22 +22,31 @@
 #'
 #' 
 #' @export
-integrate.sf <- function( sf ) {
-  x_vals <- knots(sf)
+integrate.sf <- function( sf , lower=NULL, upper=NULL, returnfunction=FALSE) {
+  # Modifico la función para poder integrar con límites personalizados
+  #x_vals <- knots(sf)
+  x_vals <- c( lower, knots(sf) , upper )
+  if (!is.null(lower)) x_vals <- x_vals[x_vals >= lower]
+  if (!is.null(upper)) x_vals <- x_vals[x_vals <= upper]
+  
   y_vals <- sf(x_vals)
   
   dx <- diff(x_vals)
   segment_areas <- dx * y_vals[-length(y_vals)]
   cumulative_areas <- cumsum(c(0, segment_areas))
-
-  integral_func <- approxfun(x_vals, cumulative_areas, 
-                             method = "linear", yleft = 0, yright = cumulative_areas[length(cumulative_areas)], ties = "ordered")
   
-  class(integral_func) <- c( "sfintegrate" , "stepfun" , class(integral_func) )
-  attr(integral_func, "call") <- sys.call()
+  if ( returnfunction ) {
+    integral <- approxfun(x_vals, cumulative_areas, 
+                          method = "linear", yleft = 0, yright = cumulative_areas[length(cumulative_areas)], ties = "ordered")
+    
+    class(integral) <- c( "sfintegrate" , "stepfun" , class(integral) )
+    attr(integral, "call") <- sys.call()
+    
+    assign("x_vals", x_vals, envir = environment(integral))
+    assign("y_vals", y_vals, envir = environment(integral))
+  } else {
+    integral <- tail(cumulative_areas, 1)
+  }
   
-  assign("x_vals", x_vals, envir = environment(integral_func))
-  assign("y_vals", y_vals, envir = environment(integral_func))
-  
-  return(integral_func)
+  return(integral)
 }
