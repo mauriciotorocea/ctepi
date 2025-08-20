@@ -33,7 +33,10 @@
 #'
 #'
 #' @export
-cdfdiffY1Y0 <- function(Copula, FY1, FY0, suppY1, suppY0){
+cdfdiffY1Y0 <- function(Copula, FY1, FY0, suppY1=NULL, suppY0=NULL){
+  
+  if ( is.null(suppY1) ) suppY1 <- get("x", envir = environment(FY1) )
+  if ( is.null(suppY0) ) suppY0 <- get("x", envir = environment(FY0) )
   
   suppXYU <- expand.grid(suppY1=suppY1, suppY0=suppY0)
   suppXYU$U <- suppXYU[,1] - suppXYU[,2]

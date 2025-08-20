@@ -4,7 +4,7 @@
 \alias{cdfdiffY1Y0}
 \title{Calculate the Mass and Distribution of the Difference U = Y1 - Y0}
 \usage{
-cdfdiffY1Y0(Copula, FY1, FY0, suppY1, suppY0)
+cdfdiffY1Y0(Copula, FY1, FY0, suppY1 = NULL, suppY0 = NULL)
 }
 \arguments{
 \item{Copula}{A copula function.}
