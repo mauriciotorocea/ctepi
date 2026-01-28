@@ -5,7 +5,7 @@ epsilondelta <- function(Y, Z,
                          ysup = max(Y, na.rm = TRUE)*100,
                          positive.effect = TRUE, 
                          y1.limit=NULL, y0.limit=NULL, equalsuppY1Y0=F, 
-                         eps.tol = 1e-8, max.iter = 100) {
+                         eps.tol = .Machine$double.eps, max.iter = 100) {
   if (!positive.effect) Y <- -Y
   
   result <- sapply(eta, function(current_eta) {
@@ -18,7 +18,7 @@ epsilondelta <- function(Y, Z,
                                  eta01 = current_eta, eta02 = current_eta, 
                                  y1.limit = y1.limit, y0.limit = y0.limit, 
                                  equalsuppY1Y0 = equalsuppY1Y0)
-        integrate.sf(ctef.aux$CTEbounds.eps$CTElb)(ysup) - delta
+        integrate.sf( ctef.aux$CTEbounds.eps$CTElb , returnfunction=TRUE )(ysup) - delta
       }
       
       f0 <- tryCatch(target_fun(0), error = function(e) NA)
@@ -39,5 +39,6 @@ epsilondelta <- function(Y, Z,
   } else {
     names(result) <- paste0("eta=", signif(eta, 4))
   }
+  
   return(result)
 }
