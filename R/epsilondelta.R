@@ -28,7 +28,7 @@ epsilondelta <- function(Y, Z,
       if (is.na(f0) || is.na(f1)) {
         NA
       } else if (sign(f0) == sign(f1)) {
-        output.noroot
+        ifelse( f0>0 , output.noroot , NA )
       } else {
         tryCatch(uniroot(target_fun, c(0, 1), tol = eps.tol, maxiter = max.iter)$root,
                  error = function(e) NA)
