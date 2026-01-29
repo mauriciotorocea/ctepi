@@ -4,6 +4,7 @@ epsilondelta <- function(Y, Z,
                          eta= c(0, 0.5, 1), 
                          ysup = max(Y, na.rm = TRUE)*100,
                          positive.effect = TRUE, 
+                         output.noroot = NA,
                          y1.limit=NULL, y0.limit=NULL, equalsuppY1Y0=F, 
                          eps.tol = .Machine$double.eps, max.iter = 100) {
   if (!positive.effect) Y <- -Y
@@ -24,8 +25,10 @@ epsilondelta <- function(Y, Z,
       f0 <- tryCatch(target_fun(0), error = function(e) NA)
       f1 <- tryCatch(target_fun(1), error = function(e) NA)
       
-      if (is.na(f0) || is.na(f1) || sign(f0) == sign(f1)) {
+      if (is.na(f0) || is.na(f1)) {
         NA
+      } else if (sign(f0) == sign(f1)) {
+        output.noroot
       } else {
         tryCatch(uniroot(target_fun, c(0, 1), tol = eps.tol, maxiter = max.iter)$root,
                  error = function(e) NA)
