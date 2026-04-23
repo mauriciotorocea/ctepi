@@ -92,42 +92,38 @@
 #' 
 #' @export
 ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL, equalsuppY1Y0=F,
-                         eps11=1,eps12=1,eps01=1,eps02=1,
-                         eta11=1,eta12=1,eta01=1,eta02=1, na.rm = F) {
+                            eps11=1,eps12=1,eps01=1,eps02=1,
+                            eta11=1,eta12=1,eta01=1,eta02=1, na.rm = F) {
   YZ1min <- min(Y[Z==1],na.rm = T)
   YZ1max <- max(Y[Z==1],na.rm = T)
   YZ0min <- min(Y[Z==0],na.rm = T)
   YZ0max <- max(Y[Z==0],na.rm = T)
-  # Verifico que el supuesto de soporte acotado no contradiga a lo observado.
   if ( is.null(y1.limit) ) {
     y1.limit <- c( YZ1min , YZ1max )
-  } else if (length(y1.limit) != 2) { 
-    stop(paste0("Error: y1.limit is not valid. It should be a vector of length 2.")) 
-  } else if (YZ1min < y1.limit[1]) { 
-    stop(paste0('Error: y1.limit[1] should be lower than min(Y[Z==1]) = ',YZ1min,'.')) 
-  } else if (YZ1max > y1.limit[2]) { 
-    stop(paste0('Error: y1.limit[2] should be greater than min(Y[Z==1]) = ',YZ1max,'.')) 
+  } else if (length(y1.limit) != 2) {
+    stop(paste0("Error: y1.limit is not valid. It should be a vector of length 2."))
+  } else if (YZ1min < y1.limit[1]) {
+    stop(paste0('Error: y1.limit[1] should be lower than min(Y[Z==1]) = ',YZ1min,'.'))
+  } else if (YZ1max > y1.limit[2]) {
+    stop(paste0('Error: y1.limit[2] should be greater than min(Y[Z==1]) = ',YZ1max,'.'))
   }
   if ( is.null(y0.limit) ) {
     y0.limit <- c( YZ0min , YZ0max )
-  } else if (length(y0.limit) != 2) { 
-    stop(paste0("Error: y0.limit is not valid. It should be a vector of length 2.")) 
-  } else if (YZ0min < y0.limit[1]) { 
-    stop(paste0('Error: y0.limit[1] should be lower than min(Y[Z==0]) = ',YZ0min,'.')) 
-  } else if (YZ0max > y0.limit[2]) { 
-    stop(paste0('Error: y0.limit[2] should be greater than min(Y[Z==0]) = ',YZ0max,'.')) 
+  } else if (length(y0.limit) != 2) {
+    stop(paste0("Error: y0.limit is not valid. It should be a vector of length 2."))
+  } else if (YZ0min < y0.limit[1]) {
+    stop(paste0('Error: y0.limit[1] should be lower than min(Y[Z==0]) = ',YZ0min,'.'))
+  } else if (YZ0max > y0.limit[2]) {
+    stop(paste0('Error: y0.limit[2] should be greater than min(Y[Z==0]) = ',YZ0max,'.'))
   }
   if (equalsuppY1Y0) {
     y1.limit <- y0.limit <- range( c(y1.limit,y0.limit) )
   }
-  
-  
   dataset <- data.frame( Y , Z )
   if (na.rm) { dataset <- dataset[ !is.na(Y) , ] }
   yz1 <- sort(Y[Z==1])
   yz0 <- sort(Y[Z==0])
   yvals <- sort(Y)
-  
   #nz1 <- length(yz1)
   #nz0 <- length(yz0)
   nz1w1 <- length(yz1)
@@ -137,33 +133,29 @@ ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL, equalsuppY1Y0=F,
   pW1 <- (nz1w1+nz0w1) / nrow(dataset)
   pW0Z1 <- nz1w0 / ( nz1w0 + nz1w1 )
   pW0Z0 <- nz0w0 / ( nz0w0 + nz0w1 )
-  
   pZ1 <- sum(dataset$Z==1) / nrow(dataset)
   pZ0 <- sum(dataset$Z==0) / nrow(dataset)
-  
   
   vals1 <- unique(yz1)
   vals0 <- unique(yz0)
   cumsumpY1Z1W1 <- cumsum(tabulate(match(yz1, vals1)))/nz1w1
   cumsumpY0Z0W1 <- cumsum(tabulate(match(yz0, vals0)))/nz0w1
-  
-  ecdfYZ1 <- approxfun(vals1, cumsumpY1Z1W1 , method = "constant", 
+  ecdfYZ1 <- approxfun(vals1, cumsumpY1Z1W1 , method = "constant",
                        yleft = 0, yright = 1, f = 0, ties = "ordered")
-  ecdfYZ0 <- approxfun(vals0, cumsumpY0Z0W1, method = "constant", 
+  ecdfYZ0 <- approxfun(vals0, cumsumpY0Z0W1, method = "constant",
                        yleft = 0, yright = 1, f = 0, ties = "ordered")
   class(ecdfYZ1) <- c("stepfun", class(ecdfYZ1))
   class(ecdfYZ0) <- c("stepfun", class(ecdfYZ0))
-  
   CTEvals <- ecdfYZ0(yvals) - ecdfYZ1(yvals)
-  CTE <- approxfun(yvals, CTEvals , 
+  CTE <- approxfun(yvals, CTEvals ,
                    method = "constant", yleft = 0, yright = 0, f = 0, ties = "ordered")
   i <- CTEvals>=0
   CTEplusvals <- CTEminusvals <- CTEvals
   CTEplusvals[!i] <- 0
   CTEminusvals[i] <- 0
-  CTEplus <- approxfun( yvals , CTEplusvals , 
+  CTEplus <- approxfun( yvals , CTEplusvals ,
                         method = "constant", yleft = 0, yright = 0, f = 0, ties = "ordered")
-  CTEminus <- approxfun(yvals, -CTEminusvals , 
+  CTEminus <- approxfun(yvals, -CTEminusvals ,
                         method = "constant", yleft = 0, yright = 0, f = 0, ties = "ordered")
   class(CTE) <- c("stepfun", class(CTE))
   class(CTEplus) <- c("stepfun", class(CTEplus))
@@ -173,54 +165,58 @@ ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL, equalsuppY1Y0=F,
   y_valsF2 <- pZ0 + y_valsF1
   y_valsF3 <- pZ0 * cumsumpY0Z0W1
   y_valsF4 <- pZ1 + y_valsF3
-  F1 <- approxfun(vals1, y_valsF1 , 
-                  method = "constant", yleft = 0, yright = pZ1, f = 0, ties = "ordered")  
-  F2 <- approxfun(vals1, y_valsF2, 
+  F1 <- approxfun(vals1, y_valsF1 ,
+                  method = "constant", yleft = 0, yright = pZ1, f = 0, ties = "ordered")
+  F2 <- approxfun(vals1, y_valsF2,
                   method = "constant", yleft = pZ0, yright = 1, f = 0, ties = "ordered")
-  F3 <- approxfun(vals0, y_valsF3, 
-                  method = "constant", yleft = 0, yright = pZ0, f = 0, ties = "ordered")  
-  F4 <- approxfun(vals0, y_valsF4, 
+  F3 <- approxfun(vals0, y_valsF3,
+                  method = "constant", yleft = 0, yright = pZ0, f = 0, ties = "ordered")
+  F4 <- approxfun(vals0, y_valsF4,
                   method = "constant", yleft = pZ1, yright = 1, f = 0, ties = "ordered")
+  F_L1_alt <- function(y) ifelse(y < y1.limit[2], F1(y), 1)
+  F_U1_alt <- function(y) ifelse(y >= y1.limit[1], F2(y), 0)
+  F_L0_alt <- function(y) ifelse(y < y0.limit[2], F3(y), 1)
+  F_U0_alt <- function(y) ifelse(y >= y0.limit[1], F4(y), 0)
+  FlY1 <- approxfun( c(y1.limit[1],vals1,y1.limit[2]) , F_L1_alt( c(y1.limit[1],vals1,y1.limit[2]) ) ,
+                     method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
+  FuY1 <- approxfun( c(y1.limit[1],vals1,y1.limit[2]) , F_U1_alt( c(y1.limit[1],vals1,y1.limit[2]) ) ,
+                     method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
+  FlY0 <- approxfun( c(y0.limit[1],vals0,y0.limit[2]) , F_L0_alt( c(y0.limit[1],vals0,y0.limit[2]) ),
+                     method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
+  FuY0 <- approxfun( c(y0.limit[1],vals0,y0.limit[2]) , F_U0_alt( c(y0.limit[1],vals0,y0.limit[2]) ),
+                     method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
   
-  y_valsF1[vals1>=y1.limit[2]] <- 1
-  FlY1 <- approxfun( c(y1.limit[1],vals1,y1.limit[2]) , c( pZ1 * cumsumpY1Z1W1[1], pZ1 * cumsumpY1Z1W1 , 1) , 
-                     method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
-  FuY1 <- approxfun( c(y1.limit[1],vals1,y1.limit[2]) , c(pZ0,pZ0 + pZ1 * cumsumpY1Z1W1,1) , 
-                     method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
-  FlY0 <- approxfun( c(y0.limit[1],vals0,y0.limit[2]) , c(pZ0 * cumsumpY0Z0W1[1], pZ0 * cumsumpY0Z0W1,1), 
-                     method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
-  FuY0 <- approxfun( c(y0.limit[1],vals0,y0.limit[2]) , c(pZ1,pZ1 + pZ0 * cumsumpY0Z0W1,1), 
-                     method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
-  
-  
+  cumsumpY1Z1W1 <- c( 0 , cumsumpY1Z1W1 )
+  cumsumpY0Z0W1 <- c( 0 , cumsumpY0Z0W1 )
+  vals1 <- c( min(vals1) - diff(range(vals1))/100 , vals1)
+  vals0 <- c( min(vals0) - diff(range(vals0))/100 , vals0)
   y_valsf1eps <- cumsumpY1Z1W1 * (1-pW0Z1) * pZ1  +  pmax( 0 , cumsumpY1Z1W1-eta12) * pW0Z1 * pZ1  +
     pmax( 0 , -eps12 + cumsumpY1Z1W1 * (1-pW0Z1) + pW0Z1 * pmax( 0 , cumsumpY1Z1W1-eta12) ) * pZ0
-  
   y_valsf2eps <- cumsumpY1Z1W1 * (1-pW0Z1) * pZ1  +  pmin( 1 , cumsumpY1Z1W1+eta11) * pW0Z1 * pZ1  +
     pmin( 1 , eps11 + cumsumpY1Z1W1 * (1-pW0Z1) + pW0Z1 * pmin( 1 , cumsumpY1Z1W1+eta11) ) * pZ0
-  
   y_valsf3eps <- cumsumpY0Z0W1 * (1-pW0Z0) * pZ0  +  pmax( 0 , cumsumpY0Z0W1-eta02) * pW0Z0 * pZ0 +
     pmax( 0 , -eps01 + cumsumpY0Z0W1 * (1-pW0Z0) + pW0Z0 * pmax( 0 , cumsumpY0Z0W1-eta02) ) * pZ1
-  
   y_valsf4eps <- cumsumpY0Z0W1 * (1-pW0Z0) * pZ0  +  pmin( 1 , cumsumpY0Z0W1+eta01) * pW0Z0 * pZ0 +
     pmin( 1 , eps02 + cumsumpY0Z0W1 * (1-pW0Z0) + pW0Z0 * pmin( 1 , cumsumpY0Z0W1+eta01) ) * pZ1
-  
-  F1epsilon <- approxfun( vals1 , y_valsf1eps, method = "constant", 
+  F1epsilon <- approxfun( vals1 , y_valsf1eps, method = "constant",
                           yleft = min(y_valsf1eps), yright = max(y_valsf1eps), f = 0, ties = "ordered")
-  F2epsilon <- approxfun( vals1 , y_valsf2eps, method = "constant", 
+  F2epsilon <- approxfun( vals1 , y_valsf2eps, method = "constant",
                           yleft = min(y_valsf2eps), yright = max(y_valsf2eps), f = 0, ties = "ordered")
-  F3epsilon <- approxfun(vals0, y_valsf3eps, 
+  F3epsilon <- approxfun(vals0, y_valsf3eps,
                          method = "constant", yleft = min(y_valsf3eps), yright = max(y_valsf3eps), f = 0, ties = "ordered")
-  F4epsilon <- approxfun(vals0, y_valsf4eps, 
+  F4epsilon <- approxfun(vals0, y_valsf4eps,
                          method = "constant", yleft = min(y_valsf4eps), yright = max(y_valsf4eps), f = 0, ties = "ordered")
-  
-  FlY1eps <- approxfun( c(y1.limit[1],vals1,y1.limit[2]) , c( y_valsf1eps[1], y_valsf1eps , 1) , 
+  F_L1_alt <- function(y) ifelse(y < y1.limit[2], F1epsilon(y), 1)
+  F_U1_alt <- function(y) ifelse(y >= y1.limit[1], F2epsilon(y), 0)
+  F_L0_alt <- function(y) ifelse(y < y0.limit[2], F3epsilon(y), 1)
+  F_U0_alt <- function(y) ifelse(y >= y0.limit[1], F4epsilon(y), 0)
+  FlY1eps <- approxfun( c(y1.limit[1],vals1,y1.limit[2]) , F_L1_alt( c(y1.limit[1],vals1,y1.limit[2]) ) ,
                         method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
-  FuY1eps <- approxfun( c(y1.limit[1],vals1, y1.limit[2]) , c( min(y_valsf2eps) , y_valsf2eps , 1 ) , 
+  FuY1eps <- approxfun( c(y1.limit[1],vals1,y1.limit[2]) , F_U1_alt( c(y1.limit[1],vals1,y1.limit[2]) ) ,
                         method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
-  FlY0eps <- approxfun( c(y0.limit[1],vals0,y0.limit[2]) , c( y_valsf3eps[1], y_valsf3eps ,1), 
+  FlY0eps <- approxfun( c(y0.limit[1],vals0,y0.limit[2]) , F_L0_alt( c(y0.limit[1],vals0,y0.limit[2]) ),
                         method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
-  FuY0eps <- approxfun( c(y0.limit[1],vals0, y0.limit[2]) , c( min(y_valsf4eps) , y_valsf4eps , 1), 
+  FuY0eps <- approxfun( c(y0.limit[1],vals0,y0.limit[2]) , F_U0_alt( c(y0.limit[1],vals0,y0.limit[2]) ),
                         method = "constant", yleft = 0, yright = 1, f = 0, ties = "ordered")
   
   class(F1) <- c("ecdf", "stepfun", class(F1))
@@ -239,15 +235,13 @@ ctefunctions <- function(Y, Z, y1.limit=NULL, y0.limit=NULL, equalsuppY1Y0=F,
   class(FuY1eps) <- c("ecdf", "stepfun", class(FuY1eps))
   class(FlY0eps) <- c("ecdf", "stepfun", class(FlY0eps))
   class(FuY0eps) <- c("ecdf", "stepfun", class(FuY0eps))
-  
   x.aux <- sort( unique(c( knots(FlY0eps), knots(FuY1eps) )) )
   x.aux.m <- c( min(x.aux)-100 , x.aux)
-  CTElb <- stepfun( x.aux , FlY0eps(x.aux.m) - FuY1eps(x.aux.m), right = TRUE)
+  CTElb <- stepfun( x.aux , FlY0eps(x.aux.m) - FuY1eps(x.aux.m), right = FALSE)
   x.aux <- sort( unique(c( knots(FuY0eps), knots(FlY1eps) )) )
   x.aux.m <- c( min(x.aux)-100 , x.aux)
-  CTEub <- stepfun( x.aux ,  FuY0eps(x.aux.m) - FlY1eps(x.aux.m), right = TRUE)
-  
-  list( ecdfYZ1 = ecdfYZ1 , 
+  CTEub <- stepfun( x.aux ,  FuY0eps(x.aux.m) - FlY1eps(x.aux.m), right = FALSE)
+  list( ecdfYZ1 = ecdfYZ1 ,
         ecdfYZ0 = ecdfYZ0 ,
         pZ1=pZ1,
         pZ0=pZ0,
